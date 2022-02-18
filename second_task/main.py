@@ -1,40 +1,57 @@
+"""
+JSON Navigation Module
+"""
+
 import json
+
 def parser():
-    key = '-'
-    with (open('kved.json', 'r', encoding='utf-8')) as file:
+    """
+    JSON parser that helps to navigate
+    through the JSON file.
+    """
+    user_input = '-'
+    with (open('twitter2.json', 'r', encoding='utf-8')) as file:
         data = json.load(file)
         history = [data]
     
-    while key != '':
+    print()
+    print('If current level type is dictionary, ')
+    print('enter the name of the key to navigate one step further.')
+    print()
+    print('If current level type is list, ')
+    print('enter the index of an element to navigate one step further.')
+    print()
+    print('Use ".." to go up one level')
+    print('Use enter to finish the program.')
+    print()
+    
+    while user_input != '':
         if isinstance(data, dict):
-            print(f'Type of the current level: dictionary')
             print('Available keys:')
             for index, key in enumerate(data.keys()): 
-                print(f'{index + 1}. {key}')
+                print(f'{index+1}. {key}')
             print()
-            key = input('Enter key or ".." to go up: ')
-            while key not in data.keys():
-                key = input('Please enter a valid key: ')
-            if key != '..' and key != '':
+            user_input = input('>>> ')
+            if user_input != '..' and user_input != '':
                 history.append(data)
-                data = data[key]
+                data = data[user_input]
 
         elif isinstance(data, list):
-            print('Type of the current level: list')
-            print(f'Available length: {len(data)}')
+            print(f'Length of the list: {len(data)}')
             print()
-            key = input('Enter index of the list element or ".." to go up: ')
-            if key != '..' and key != '':
+            user_input = input('>>> ')
+            if user_input != '..' and user_input != '':
                 history.append(data)
-                data = data[int(key)]
+                data = data[int(user_input)]
 
         else:
             print(data)
-            print("There are no more levels.")
-            key = input("Enter '..' to go up or press enter to exit: ")
+            print("This is the last level, use '..' to navigate back")
+            print("or use enter to finish the program.")
+            user_input = input('>>> ')
 
-    if key == '..':
+        if user_input == '..':
             data = history.pop()
 
-    print()
-    print('End of the program', sep='\n')
+if __name__ == "__main__":
+    parser()
